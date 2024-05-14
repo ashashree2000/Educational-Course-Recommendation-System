@@ -35,7 +35,7 @@ def recommend(course):
 origins = [
     "http://localhost",
     "http://localhost:3000",
-    "https://educational-course-recommendation-system.vercel.app/",
+    "https://educational-course-recommendation-system.vercel.app",
 ]
 
 app = FastAPI()
