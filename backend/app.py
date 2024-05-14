@@ -34,8 +34,8 @@ def recommend(course):
 # Set up CORS middleware
 origins = [
     "http://localhost",
-    "http://localhost:3000",  # Add this origin for Next.js
-    # Add more origins as needed
+    "http://localhost:3000",
+    "https://educational-course-recommendation-system.vercel.app/",
 ]
 
 app = FastAPI()

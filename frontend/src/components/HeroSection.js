@@ -13,7 +13,9 @@ const HeroSection = () => {
 
   const fetchCourseNames = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/");
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/`
+      );
       setCourseNames(response.data.course_names);
     } catch (error) {
       console.error("Error fetching course names:", error);
@@ -22,9 +24,12 @@ const HeroSection = () => {
 
   const handleRecommendations = async () => {
     try {
-      const response = await axios.post("http://localhost:8000/recommend", {
-        course_name: selectedCourse,
-      });
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/recommend`,
+        {
+          course_name: selectedCourse,
+        }
+      );
       setRecommendations(response.data.recommendations);
     } catch (error) {
       console.error("Error fetching recommendations:", error);
