@@ -14,7 +14,7 @@ const HeroSection = () => {
   const fetchCourseNames = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/`
+        `https://educational-course-recommendation-system.onrender.com/`
       );
       setCourseNames(response.data.course_names);
     } catch (error) {
@@ -25,7 +25,7 @@ const HeroSection = () => {
   const handleRecommendations = async () => {
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/recommend`,
+        `https://educational-course-recommendation-system.onrender.com/recommend`,
         {
           course_name: selectedCourse,
         }
