@@ -1,5 +1,11 @@
 # Educational Course Recommendation System
 
+## Screenshots
+![Screenshot 1](Screenshot 2024-05-30 at 9.47.11 PM.jpg)
+![Screenshot 2](screenshot2.jpg)
+![Screenshot 3](screenshot3.jpg)
+![Screenshot 4](screenshot4.jpg)
+
 ## Overview
 This project is aimed at recommending educational courses to users. It utilizes a 'Content Based' Recommendation System that suggests courses based on user input of a selected course. Techniques such as Pre-processing, Count Vectorization, Stemming, and Cosine Similarity are employed for generating recommendations.
 
