@@ -1,16 +1,17 @@
 # Educational Course Recommendation System
 
-## Screenshots
-![Screenshot 1](Screenshot 2024-05-30 at 9.47.11 PM.jpg)
-![Screenshot 2](screenshot2.jpg)
-![Screenshot 3](screenshot3.jpg)
-![Screenshot 4](screenshot4.jpg)
+<img align="right" alt="Coding" width="400" src="1.jpg">
+
+
+
 
 ## Overview
 This project is aimed at recommending educational courses to users. It utilizes a 'Content Based' Recommendation System that suggests courses based on user input of a selected course. Techniques such as Pre-processing, Count Vectorization, Stemming, and Cosine Similarity are employed for generating recommendations.
 
 ## Deployment
 The project is deployed on Vercel and can be accessed through the following link: [Educational Course Recommendation System](https://educational-course-recommendation-system.vercel.app/)
+
+<img align="right" alt="Coding" width="400" src="4.jpg">
 
 ## Project Structure
 The repository contains the following files and directories:
@@ -20,6 +21,7 @@ The repository contains the following files and directories:
 - `Educational_course_recommendation_system (1).ipynb`: Jupyter Notebook containing code for the recommendation system.
 - `.DS_Store`: System file that can be ignored.
 - `requirements.txt`: File specifying the Python dependencies required for the project.
+<img align="right" alt="Coding" width="400" src="8.jpg">
 
 ## Tech Stack
 The project utilizes the following technologies:
