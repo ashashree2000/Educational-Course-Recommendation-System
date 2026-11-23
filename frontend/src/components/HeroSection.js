@@ -2,37 +2,73 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+const API_URL = "https://educational-course-recommendation-system.onrender.com";
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// The backend runs on Render's free tier, which sleeps when idle and can take
+// up to a minute to wake. Retry for a while instead of failing on the first try.
+const withRetry = async (request, attempts = 8, delayMs = 8000) => {
+  for (let i = 0; i < attempts; i++) {
+    try {
+      return await request();
+    } catch (error) {
+      if (i === attempts - 1) throw error;
+      await sleep(delayMs);
+    }
+  }
+};
+
 const HeroSection = () => {
   const [courseNames, setCourseNames] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState("");
   const [recommendations, setRecommendations] = useState([]);
+  const [status, setStatus] = useState("loading"); // loading | ready | error
+  const [recLoading, setRecLoading] = useState(false);
+  const [recError, setRecError] = useState("");
 
   useEffect(() => {
     fetchCourseNames();
   }, []);
 
   const fetchCourseNames = async () => {
+    setStatus("loading");
     try {
-      const response = await axios.get(
-        `https://educational-course-recommendation-system.onrender.com/`
+      const response = await withRetry(() =>
+        axios.get(`${API_URL}/`, { timeout: 60000 })
       );
       setCourseNames(response.data.course_names);
+      setStatus("ready");
     } catch (error) {
       console.error("Error fetching course names:", error);
+      setStatus("error");
     }
   };
 
   const handleRecommendations = async () => {
+    if (!selectedCourse) {
+      setRecError("Please select a course first.");
+      return;
+    }
+    setRecError("");
+    setRecLoading(true);
+    setRecommendations([]);
     try {
-      const response = await axios.post(
-        `https://educational-course-recommendation-system.onrender.com/recommend`,
-        {
-          course_name: selectedCourse,
-        }
+      const response = await withRetry(
+        () =>
+          axios.post(
+            `${API_URL}/recommend`,
+            { course_name: selectedCourse },
+            { timeout: 60000 }
+          ),
+        3,
+        5000
       );
       setRecommendations(response.data.recommendations);
     } catch (error) {
       console.error("Error fetching recommendations:", error);
+      setRecError("Could not get recommendations. Please try again.");
+    } finally {
+      setRecLoading(false);
     }
   };
 
@@ -49,11 +85,26 @@ const HeroSection = () => {
           >
             Select a course:
           </label>
+          {status === "loading" && (
+            <p className="text-sm text-gray-600 mb-2">
+              Loading courses... The server sleeps when idle, so the first load
+              can take up to a minute.
+            </p>
+          )}
+          {status === "error" && (
+            <p className="text-sm text-red-600 mb-2">
+              Could not reach the server.{" "}
+              <button onClick={fetchCourseNames} className="underline">
+                Try again
+              </button>
+            </p>
+          )}
           <div className="relative">
             <select
               id="courseSelect"
               value={selectedCourse}
               onChange={(e) => setSelectedCourse(e.target.value)}
+              disabled={status !== "ready"}
               className="w-full px-3 py-2 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-purple-400 bg-white text-gray-800"
             >
               <option value="">Select a course</option>
@@ -80,10 +131,12 @@ const HeroSection = () => {
         </div>
         <button
           onClick={handleRecommendations}
-          className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition-colors duration-300"
+          disabled={status !== "ready" || recLoading}
+          className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition-colors duration-300 disabled:opacity-50"
         >
-          Get Recommendations
+          {recLoading ? "Finding similar courses..." : "Get Recommendations"}
         </button>
+        {recError && <p className="text-sm text-red-600 mt-2">{recError}</p>}
         {recommendations.length > 0 && (
           <div className="mt-6">
             <h2 className="text-2xl font-bold mb-2 text-purple-600">
